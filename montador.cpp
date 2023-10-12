@@ -5,24 +5,24 @@
 
 using namespace std; 
 
-void remove_macros(fstream &file) {
+void remove_macros(string file_name) {
+    ifstream file(file_name);
     string text;
-    /*
-    while(getline(newFile, text)) {
-        cout << text << '\n';
+    while(getline(file, text)) {
+        //cout << text << '\n';
     }
-    */
-    text<<file;
-    cout << text;
 }
 
-void pre_processing(char **argv) {
-    ifstream file(argv[1]); // abre o arquivo .asm ou .mcr
-    string file_name = argv[1];
-    string text, preffix;
+void pre_processing(char *argv[]) {
+    
+    string file_name = argv[1], text, preffix;
     bool macro = (file_name.substr(file_name.size()-4) == ".mcr");
     preffix = (macro ? "temp_" : "processed_");
-    ofstream newFile(preffix + file_name); // cria novo arquivo .asm ou .mcr
+    file_name = preffix + file_name;
+    
+    // abre arquivos
+    ifstream file(argv[1]); // abre o arquivo .asm ou .mcr
+    ofstream newFile(file_name); // cria novo arquivo .asm ou .mcr
 
     bool creatingToken = false;
     while(getline(file, text)) {
@@ -70,8 +70,8 @@ void pre_processing(char **argv) {
         }
     }
     file.close();
-    if(macro) remove_macros(newFile);
     newFile.close();
+    if(macro) remove_macros(file_name);
 }
 
 int main(int arg, char *argv[]) {
