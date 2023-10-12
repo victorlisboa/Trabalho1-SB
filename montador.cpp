@@ -27,18 +27,19 @@ vector<string> split(string linha, char sep=' ') {
 
 void remove_macros(string file_name) {
     ifstream file(file_name);
-    ofstream newFile("processed_" + file_name.substr(0, file_name.size()-3) + "pre");
+    ofstream newFile("processed_" + file_name.substr(5, file_name.size()-8) + "pre");
     string text;
     map<string, pair<bool, int>> MNT;   // MNT => <nome da macro, <macro definida, qnt parametros>>
     map<string, vector<vector<string>>> MDT;    // MDT => <nome da macro, corpo da macro>
     /* Cada posicao do vetor corresponde a uma linha do corpo da macro 
        e cada linha eh um vetor em que cada posicao eh um token */
 
-    bool lendoMacro = false, expandiu = false;
+    bool lendoMacro = false;
     string macroSendoLida = "";
     vector<string> param;
     while(getline(file, text)) {
         vector<string> linha = split(text);  // tokens de cada linha
+        bool expandiu = false;
         for(int i=0; i<linha.size(); i++) {
             string &token = linha[i];
             int tokenSize = token.size();
@@ -72,19 +73,12 @@ void remove_macros(string file_name) {
                     vector<string> args;
                     if(MNT[token].second > 0) {
                         args = split(linha[i+1], ',');
-                        if(args.size() != MNT[token].second) {
-                            //////// Apontar linha do erro ///////////
-                            cout << "MACRO " << token << " esperava " << MNT[token].second <<
-                            " argumentos, mas recebeu " << args.size() << ".\n";
-                            exit(1);
-                        }
                     }
                     for(int j=0; j<MDT[token].size(); j++) {    // percorre linhas do corpo
                         for(string token2 : MDT[token][j]) {    // percorre  tokens da linha
                             if(token2[0] == '#') {                  // faz o binding
                                 int argIdx = stoi(token2.substr(1));// pega index do arg
                                 newFile << args[argIdx-1];
-                                break;
                             }
                             else {
                                 newFile << token2;
@@ -93,22 +87,29 @@ void remove_macros(string file_name) {
                         }
                         newFile << '\n';
                     }
+                    break;
                 }
             }
         }
 
-        for(int i=0; i<linha.size(); i++)
-            if(!expandiu)   // efetivamente passa a linha para o novo arquivo
+        bool escreveuLinha = false;
+        for(int i=0; i<linha.size(); i++) {
+            if(!expandiu && !lendoMacro && linha[i] != "ENDMACRO") {  // efetivamente passa a linha para o novo arquivo
+                escreveuLinha = true;
                 newFile << linha[i] << ' ';
-        newFile << '\n';
+            }
+        }
+        if(escreveuLinha)
+            newFile << '\n';
     }
 
     file.close();
     newFile.close();
     
+    cout << "Macros removidas do codigo:\n";
     for(auto [key, value] : MDT) {
         if(!MNT[key].first) continue;
-        cout << "Macro " << key << ":\n";
+        cout << key << ":\n";
         for(auto vetor1 : value) {
             for(auto token : vetor1) {
                 cout << token << ' ';

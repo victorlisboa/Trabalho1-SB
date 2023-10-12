@@ -5,14 +5,15 @@ O trabalho consiste em implementar em C/C++ um método de tradução de uma ling
 # Lista de tarefas
 ## Montador
 - [x] Leitura do arquivo de entrada para usar no código
-- [x] Tratamento da entrada separando intruções, operandos e rótulos, ignorando espaçamentos e comentários
 - [] Idenficar todos os tipos de erros do programa
     - [] Declarações e rótulos ausentes
     - [] Declarações e rótulos repetidos
     - [] Instruções e diretivas inválidas
     - [] Instruções e diretivas com a quantidade de operandos errada
-- [] Passagem 0
-    - [] Eliminação das macros (em progresso 95% pronto)
+- [x] Passagem 0
+    - [x] Tratamento da entrada separando intruções, operandos e rótulos, ignorando espaçamentos e comentários
+    - [x] Eliminação das macros
+    - [] Realocando seção data para final
 - [] Primeira passagem
     - [] Tabela de instruções
     - [] Tabela de símbolos
