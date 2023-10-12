@@ -3,11 +3,26 @@
 #include <vector>
 #include <cctype>
 
-using namespace std;
+using namespace std; 
 
-void pre_processing(ifstream &file, string file_name) {
+void remove_macros(fstream &file) {
     string text;
-    ofstream newFile("processed_" + file_name);
+    /*
+    while(getline(newFile, text)) {
+        cout << text << '\n';
+    }
+    */
+    text<<file;
+    cout << text;
+}
+
+void pre_processing(char **argv) {
+    ifstream file(argv[1]); // abre o arquivo .asm ou .mcr
+    string file_name = argv[1];
+    string text, preffix;
+    bool macro = (file_name.substr(file_name.size()-4) == ".mcr");
+    preffix = (macro ? "temp_" : "processed_");
+    ofstream newFile(preffix + file_name); // cria novo arquivo .asm ou .mcr
 
     bool creatingToken = false;
     while(getline(file, text)) {
@@ -54,19 +69,19 @@ void pre_processing(ifstream &file, string file_name) {
             }
         }
     }
+    file.close();
+    if(macro) remove_macros(newFile);
     newFile.close();
 }
 
 int main(int arg, char *argv[]) {
 
     if(arg < 2) {
-        cout << "Voce deve incluir o nome do programa .asm para compilacao!";
+        cout << "Voce deve incluir o nome do programa .asm para compilacao!\n";
         return 0;
     }
-    
-    ifstream file(argv[1]);
-    pre_processing(file, argv[1]);
-    file.close();
+
+    pre_processing(argv);
 
     cout << "O arquivo " << argv[1] << " foi preprocessado com sucesso!\n";
 
