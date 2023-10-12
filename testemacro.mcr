@@ -20,7 +20,7 @@ TRES: CONST 3
 RESULTADO: SPACE
 
 ;;;;;;;;;;;
-SECAO TEXTO
+SECAO TEXTo
 ;;;;;;;;;;;
 
 SOMA UM,DOIS        ;chama macro

@@ -13,7 +13,7 @@ O trabalho consiste em implementar em C/C++ um método de tradução de uma ling
 - [x] Passagem 0
     - [x] Tratamento da entrada separando intruções, operandos e rótulos, ignorando espaçamentos e comentários
     - [x] Eliminação das macros
-    - [] Realocando seção data para final
+    - [x] Realocando seção data para final
 - [] Primeira passagem
     - [] Tabela de instruções
     - [] Tabela de símbolos

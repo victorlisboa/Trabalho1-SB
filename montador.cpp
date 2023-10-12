@@ -25,10 +25,37 @@ vector<string> split(string linha, char sep=' ') {
     return res;
 }
 
-void remove_macros(string file_name) {
+void replace_data_section(string file_name) {
+    string text, new_file_name = "processed_" + file_name.substr(5);
     ifstream file(file_name);
-    ofstream newFile("processed_" + file_name.substr(5, file_name.size()-8) + "pre");
-    string text;
+    ofstream newFile(new_file_name);
+
+    vector<string> secao_data;
+    bool lendo_data_section = false;
+    while(getline(file, text)) {
+        if(text.find("SECAO DATA") != -1) {
+            lendo_data_section = true;
+        }
+        if(text.find("SECAO TEXT") != -1) {
+            lendo_data_section = false;
+        }
+
+        if(lendo_data_section) {
+            secao_data.push_back(text);
+        }
+        else {
+            newFile << text << '\n';
+        }
+    }
+    for(auto linha : secao_data) {
+        newFile << linha << '\n';
+    }
+}
+
+string remove_macros(string file_name) {
+    string text, new_file_name = "temp_" + file_name.substr(5, file_name.size()-8) + "pre";
+    ifstream file(file_name);
+    ofstream newFile(new_file_name);
     map<string, pair<bool, int>> MNT;   // MNT => <nome da macro, <macro definida, qnt parametros>>
     map<string, vector<vector<string>>> MDT;    // MDT => <nome da macro, corpo da macro>
     /* Cada posicao do vetor corresponde a uma linha do corpo da macro 
@@ -105,6 +132,7 @@ void remove_macros(string file_name) {
 
     file.close();
     newFile.close();
+    remove(file_name.c_str());  // apaga o arquivo temp_X.mcr
     
     cout << "Macros removidas do codigo:\n";
     for(auto [key, value] : MDT) {
@@ -118,14 +146,14 @@ void remove_macros(string file_name) {
         }
         cout << '\n';
     }
+    return new_file_name;
 }
 
 void pre_processing(char *argv[]) {
     
-    string file_name = argv[1], text, preffix;
+    string file_name = argv[1], text;
+    file_name = "temp_" + file_name;
     bool macro = (file_name.substr(file_name.size()-4) == ".mcr");
-    preffix = (macro ? "temp_" : "processed_");
-    file_name = preffix + file_name;
     
     // abre arquivos
     ifstream file(argv[1]); // abre o arquivo .asm ou .mcr
@@ -161,7 +189,7 @@ void pre_processing(char *argv[]) {
 
         if(newLine.size() > 0) {
             newFile << newLine;
-            if(newLine[newLine.size()-1] != ':') {
+            if(newLine[newLine.size()-1] != ':') { // deixar rotulo na mesma linha que instrucao
                 newFile << '\n';
             }
             else {
@@ -172,9 +200,10 @@ void pre_processing(char *argv[]) {
     file.close();
     newFile.close();
     if(macro) {
-        remove_macros(file_name);
-        // apaga arquivo temp
+        file_name = remove_macros(file_name);
     }
+    replace_data_section(file_name);
+    remove(file_name.c_str()); // apaga arquivo temp
 }
 
 int main(int arg, char *argv[]) {
