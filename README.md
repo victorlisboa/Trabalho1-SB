@@ -12,7 +12,7 @@ O trabalho consiste em implementar em C/C++ um método de tradução de uma ling
     - [] Instruções e diretivas inválidas
     - [] Instruções e diretivas com a quantidade de operandos errada
 - [] Passagem 0
-    - [] Eliminação das macros
+    - [] Eliminação das macros (em progresso 95% pronto)
 - [] Primeira passagem
     - [] Tabela de instruções
     - [] Tabela de símbolos
