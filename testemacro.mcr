@@ -27,3 +27,4 @@ SOMA UM,DOIS        ;chama macro
 STORE RESULTADO     ;guarda o resultado
 OUTPUT RESULTADO    ;imprime resultado
 SUBTRAI RESULTADO,TRES
+STOP
