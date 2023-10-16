@@ -97,6 +97,133 @@ void first_pass(string file_name) {
         }
     }
 }
+int getOp(string expression){
+    vector<string> values = split(expression,'+');
+    int op = 0;
+    if (TS.find(values[0]) != TS.end()){
+        op += TS[values[0]][1];
+        if(values.size() > 1) op += stoi(values[1]);
+    }
+    else{
+        return -1;
+    }
+    return op;
+}
+void second_pass(string file_name) {
+    ifstream file(file_name);
+    string text;
+    size_t last_index = file_name.find_last_of("."); 
+    string raw_name = file_name.substr(0, last_index); 
+    ofstream newFile(raw_name.substr(10,raw_name.size()) + ".obj");
+    string secao = "text";
+
+    int contador_pos = 0, contador_linha = 0;
+    while(getline(file, text)) {
+        bool operandos_corretos = true;
+        contador_linha++;
+        if(text.find("SECAO") != -1) {
+            if (text.find("SECAO DATA") != -1) {
+                secao = "data";
+            }
+            continue;
+        }
+        vector<string> linha = split(text);
+        string instrucao = linha[0];                // nao necessariamente vai ser uma instrucao
+        if(linha[0][linha[0].size()-1] == ':') {    // tem rotulo na linha
+            linha.erase(linha.begin());
+        }
+
+        instrucao = linha[0];
+        string op1 = "", op2 = "";
+        if (secao == "text"){
+            if (instrucao == "STOP"){
+                if(linha.size() > 1){
+                    operandos_corretos = false;
+                    cout << "Erro sintático na linha " << contador_linha << ". Operandos inválidos." << endl;
+                }
+                else{
+                    newFile << "14 ";
+                }
+            }
+            else if(instrucao == "COPY"){
+                if(linha.size() > 2){
+                    operandos_corretos = false;
+                }
+                else{
+                    vector<string> ops = split(linha[1],',');
+                    if (ops.size() != 2){
+                        operandos_corretos = false;
+                    }
+                    else{
+                        newFile << "09 ";
+                        op1 = ops[0];
+                        op2 = ops[1];
+                    }
+                }
+            }
+            else{
+                bool achou_instrucao = false;
+                for(int i=0; i<TI.size(); i++) {
+                    if(instrucao == TI[i].first) {
+                        achou_instrucao = true;
+                        string opcode = "";
+                        if(i < 9){
+                            opcode = "0" + to_string(i+1);
+                        }
+                        else{
+                            opcode = to_string(i+1);
+                        }
+                        contador_pos += TI[i].second;
+                        newFile << opcode << " ";
+                        if(linha.size() != 2 || split(linha[1], ',').size() != 1){
+                            operandos_corretos = false;
+                        }
+                        else{
+                            op1 = linha[1];
+                        }
+                        break;
+                    }
+                }
+            }     
+            bool operando_valido = true;
+            int op;
+            if(op1 != ""){
+                op = getOp(op1); 
+                if(op != -1){
+                    newFile << to_string(op) << " ";
+                }
+            }
+            if(op2 != ""){
+                op = getOp(op2); 
+                if(op != -1){
+                    newFile << to_string(op) << " ";
+                }
+            }      
+        }
+        if(secao == "data"){
+            string diretiva = linha[0];
+            if(linha.size() > 2){
+                operandos_corretos = false;
+            }
+            else{
+                if(diretiva == "SPACE"){
+                    int repeticoes = 1;
+                    if(linha[linha.size()-1] != "SPACE") {
+                        repeticoes = stoi(linha[1]);
+                    }
+                    for (int i = 0; i < repeticoes; i++){
+                        newFile << "0" << " ";
+                    }
+                }
+                else if(diretiva == "CONST"){
+                    newFile << linha[1] << " ";
+                }
+            }
+        }
+    }
+    file.close();
+    newFile.close();
+}
 
 void replace_data_section(string file_name) {
     string text, new_file_name = "processed_" + file_name.substr(5);
@@ -291,6 +418,7 @@ int main(int arg, char *argv[]) {
 
     string FILE_NAME = "processed_" + (string) argv[1];
     first_pass(FILE_NAME);
+    second_pass(FILE_NAME);
 
     cout << "Tabela de Simbolos:\nRotulo\t\tEndereco\tLinha\n";
     for(auto [rotulo, arr] : TS) {
