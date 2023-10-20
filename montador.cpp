@@ -139,14 +139,14 @@ void second_pass(string file_name) {
             if (instrucao == "STOP"){
                 if(linha.size() > 1){
                     operandos_corretos = false;
-                    cout << "Erro sintático na linha " << contador_linha << ". Operandos inválidos." << endl;
+                    cout << "Erro sintatico na linha " << contador_linha << ". Operandos invalidos." << endl;
                 }
                 else{
                     newFile << "14 ";
                 }
             }
             else if(instrucao == "COPY"){
-                if(linha.size() > 2){
+                if(linha.size() != 2){
                     operandos_corretos = false;
                 }
                 else{
@@ -184,7 +184,7 @@ void second_pass(string file_name) {
                         break;
                     }
                 }
-            }     
+            }
             bool operando_valido = true;
             int op;
             if(op1 != ""){
@@ -212,7 +212,7 @@ void second_pass(string file_name) {
                         repeticoes = stoi(linha[1]);
                     }
                     for (int i = 0; i < repeticoes; i++){
-                        newFile << "0" << " ";
+                        newFile << "0 ";
                     }
                 }
                 else if(diretiva == "CONST"){
