@@ -3,16 +3,6 @@
 
 using namespace std;
 
-string get_file_name(string raw_file_name) {
-    string file_name = "";
-    vector<string> path = split(raw_file_name, '/');
-    string last = path[path.size()-1];
-    for(int i=0; i<last.size(); i++) {
-        file_name += last[i];
-    }
-    return file_name;
-}
-
 string replace_data_section(string file_name) {
     string text, aux = get_file_name(file_name), new_file_name;
     int path_size = file_name.size()-aux.size();

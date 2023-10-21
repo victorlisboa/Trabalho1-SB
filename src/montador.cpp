@@ -79,10 +79,10 @@ int getOp(string expression){
 }
 void second_pass(string file_name) {
     ifstream file(file_name);
-    string text;
-    size_t last_index = file_name.find_last_of("."); 
-    string raw_name = file_name.substr(0, last_index); 
-    ofstream newFile(raw_name.substr(10,raw_name.size()) + ".obj");
+    string text, raw_name = get_file_name(file_name), path = file_name.substr(0, file_name.size()-raw_name.size());
+    // size_t last_index = file_name.find_last_of(".");
+    // string raw_name = file_name.substr(0, last_index);
+    ofstream newFile(path + raw_name.substr(10,raw_name.size()-14) + ".obj");
     string secao = "text";
 
     int contador_pos = 0, contador_linha = 0;

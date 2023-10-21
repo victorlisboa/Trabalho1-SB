@@ -18,6 +18,16 @@ vector<string> split(string linha, char sep) {
     return res;
 }
 
+string get_file_name(string raw_file_name) {
+    string file_name = "";
+    vector<string> path = split(raw_file_name, '/');
+    string last = path[path.size()-1];
+    for(int i=0; i<last.size(); i++) {
+        file_name += last[i];
+    }
+    return file_name;
+}
+
 // tabela de instrucoes -> <instrucao, tamanho> onde o opcode eh o proprio index
 vector<pair<string, int>> TI = {
     {"ADD", 2},
