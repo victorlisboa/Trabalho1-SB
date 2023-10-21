@@ -120,6 +120,7 @@ void second_pass(string file_name) {
     int contador_pos = 0, contador_linha = 0;
     while(getline(file, text)) {
         bool operandos_corretos = true;
+        bool rotulo_inexistente = false;
         contador_linha++;
         if(text.find("SECAO") != -1) {
             if (text.find("SECAO DATA") != -1) {
@@ -137,9 +138,8 @@ void second_pass(string file_name) {
         string op1 = "", op2 = "";
         if (secao == "text"){
             if (instrucao == "STOP"){
-                if(linha.size() > 1){
+                if(linha.size() != 1){
                     operandos_corretos = false;
-                    cout << "Erro sintatico na linha " << contador_linha << ". Operandos invalidos." << endl;
                 }
                 else{
                     newFile << "14 ";
@@ -155,24 +155,16 @@ void second_pass(string file_name) {
                         operandos_corretos = false;
                     }
                     else{
-                        newFile << "09 ";
+                        newFile << "9 ";
                         op1 = ops[0];
                         op2 = ops[1];
                     }
                 }
             }
             else{
-                bool achou_instrucao = false;
                 for(int i=0; i<TI.size(); i++) {
                     if(instrucao == TI[i].first) {
-                        achou_instrucao = true;
-                        string opcode = "";
-                        if(i < 9){
-                            opcode = "0" + to_string(i+1);
-                        }
-                        else{
-                            opcode = to_string(i+1);
-                        }
+                        string opcode = to_string(i+1);
                         contador_pos += TI[i].second;
                         newFile << opcode << " ";
                         if(linha.size() != 2 || split(linha[1], ',').size() != 1){
@@ -185,18 +177,23 @@ void second_pass(string file_name) {
                     }
                 }
             }
-            bool operando_valido = true;
             int op;
             if(op1 != ""){
                 op = getOp(op1); 
                 if(op != -1){
                     newFile << to_string(op) << " ";
                 }
+                else{
+                    rotulo_inexistente = true;
+                }
             }
             if(op2 != ""){
                 op = getOp(op2); 
                 if(op != -1){
                     newFile << to_string(op) << " ";
+                }
+                else {
+                    rotulo_inexistente = true;
                 }
             }      
         }
@@ -220,7 +217,14 @@ void second_pass(string file_name) {
                 }
             }
         }
+        if(!operandos_corretos){
+            cout << "Erro sintatico na linha " << contador_linha << ". Operandos invalidos." << endl;
+        }
+        if(rotulo_inexistente){
+            cout << "Erro semantico na linha " << contador_linha << ". Rótulo não definido" << endl;
+        }
     }
+    
     file.close();
     newFile.close();
 }
@@ -418,7 +422,7 @@ int main(int arg, char *argv[]) {
 
     string FILE_NAME = "processed_" + (string) argv[1];
     first_pass(FILE_NAME);
-    second_pass(FILE_NAME);
+    //second_pass(FILE_NAME);
 
     cout << "Tabela de Simbolos:\nRotulo\t\tEndereco\tLinha\n";
     for(auto [rotulo, arr] : TS) {
