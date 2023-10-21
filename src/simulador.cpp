@@ -11,7 +11,23 @@
 using namespace std;
 
 int data_section(vector <int> mem){
-    return 0;
+    int data = mem.size();
+    int contador_pos = 0;
+    while (contador_pos < mem.size() && contador_pos < data){
+        int instrucao = mem[contador_pos];
+        int tamanho = TI[instrucao - 1].second;
+        if (instrucao < 5 || instrucao > 8){
+            for (int i=1;i<tamanho;i++){
+                int op = mem[contador_pos+i];
+                if(op < data) data = op;
+            }
+        }
+        // cout << "INSTRUÇÃO: " << instrucao << endl;
+        // cout << "Quantidade de operandos: " << tamanho << endl;
+        // cout << "Data: " << data << endl; 
+        contador_pos += tamanho;
+    }
+    return data;
 }
 
 void simulador(vector <int> mem, int data){
@@ -23,7 +39,7 @@ void simulador(vector <int> mem, int data){
     while(!sair){
         string saida = "";
         bool skip = false;
-        int instrucao = (mem[contador_pos]);
+        int instrucao = mem[contador_pos];
         int op1, op2;
         if(contador_pos + 1 < mem.size()) op1 = mem[contador_pos+1];
         if(contador_pos + 2 < mem.size()) op2 = mem[contador_pos+2];
@@ -74,6 +90,13 @@ void simulador(vector <int> mem, int data){
         if(!skip) contador_pos += TI[instrucao-1].second;
         else contador_pos = pc_skip;
         cout << endl;
+
+        if(instrucao >= 5 && instrucao <= 8){
+            if(op1 >= data){
+                cout << "Segmentation2 fault (core dumped)" << endl;
+                break;
+            }
+        }
         
     }
 }
