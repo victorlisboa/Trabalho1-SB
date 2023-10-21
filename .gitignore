@@ -1,2 +1,4 @@
-montador.exe
+*.exe
 .vscode
+obj
+montador
