@@ -11,23 +11,6 @@
 using namespace std;
 
 map<string, array<int, 3>> TS;          // tabela de simbolos <simbolo, <definido, endereco, linha>>
-vector<pair<string, int>> TI =          // tabela de instrucoes <instrucao, tamanho> 
-{                                       // opcode eh o proprio index
-    {"ADD", 2},
-    {"SUB", 2},
-    {"MUL", 2},
-    {"DIV", 2},
-    {"JMP", 2},
-    {"JMPN", 2},
-    {"JMPP", 2},
-    {"JMPZ", 2},
-    {"COPY", 3},
-    {"LOAD", 2},
-    {"STORE", 2},
-    {"INPUT", 2},
-    {"OUTPUT", 2},
-    {"STOP", 1}
-};
 
 void first_pass(string file_name) {
     ifstream file(file_name);

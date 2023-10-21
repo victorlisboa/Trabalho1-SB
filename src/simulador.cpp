@@ -6,43 +6,10 @@
 #include <string>
 #include <array>
 #include <algorithm>
+#include "utils.h"
+
 using namespace std;
 
-vector<pair<string, int>> TI =          // tabela de instrucoes <instrucao, tamanho> 
-{                                       // opcode eh o proprio index
-    {"ADD", 2},
-    {"SUB", 2},
-    {"MUL", 2},
-    {"DIV", 2},
-    {"JMP", 2},
-    {"JMPN", 2},
-    {"JMPP", 2},
-    {"JMPZ", 2},
-    {"COPY", 3},
-    {"LOAD", 2},
-    {"STORE", 2},
-    {"INPUT", 2},
-    {"OUTPUT", 2},
-    {"STOP", 1}
-};
-
-vector<string> split(string linha, char sep=' ') {
-    /*  Funcao que recebe uma string e separa ela em tokens.
-        Semelhante ao split do Python */
-    vector<string> res;
-    string token = "";
-    for(int i=0; i<linha.size(); i++) {
-        if(linha[i] != sep) {
-            token += linha[i];
-        }
-        else {
-            res.push_back(token);
-            token = "";
-        }
-    }
-    if(token != "") res.push_back(token);
-    return res;
-}
 int data_section(vector <int> mem){
     return 0;
 }
@@ -123,8 +90,8 @@ int main(int arg, char *argv[]){
     getline(file, text);
     vector <string> slots = split(text);
     vector <int> mem;
-    std::transform(slots.begin(), slots.end(), std::back_inserter(mem),
-            [](const std::string& str) { return std::stoi(str); });
+    transform(slots.begin(), slots.end(), back_inserter(mem),
+            [](const string& str) { return stoi(str); });
 
     int data = data_section(mem);
     simulador(mem, data);

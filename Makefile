@@ -12,11 +12,14 @@ PROGRAMS = montador simulador
 
 all: setup $(PROGRAMS)
 
-$(PROGRAMS): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
 setup:
 	mkdir -p $(OBJ_DIR)
+
+montador: $(OBJ_DIR)/montador.o $(OBJ_DIR)/preprocessador.o $(OBJ_DIR)/utils.o
+	$(CXX) $(CFLAGS) $^ -o $@
+
+simulador: $(OBJ_DIR)/simulador.o $(OBJ_DIR)/utils.o
+	$(CXX) $(CFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@

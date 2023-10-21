@@ -17,3 +17,21 @@ vector<string> split(string linha, char sep) {
     if(token != "") res.push_back(token);
     return res;
 }
+
+// tabela de instrucoes -> <instrucao, tamanho> onde o opcode eh o proprio index
+vector<pair<string, int>> TI = {
+    {"ADD", 2},
+    {"SUB", 2},
+    {"MUL", 2},
+    {"DIV", 2},
+    {"JMP", 2},
+    {"JMPN", 2},
+    {"JMPP", 2},
+    {"JMPZ", 2},
+    {"COPY", 3},
+    {"LOAD", 2},
+    {"STORE", 2},
+    {"INPUT", 2},
+    {"OUTPUT", 2},
+    {"STOP", 1}
+};
