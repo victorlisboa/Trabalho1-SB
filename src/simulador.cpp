@@ -75,7 +75,7 @@ void simulador(vector <int> mem, int data){
         else contador_pos = pc_skip;
         cout << endl;
         
-    }  
+    }
 }
 
 int main(int arg, char *argv[]){

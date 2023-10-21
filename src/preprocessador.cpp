@@ -159,11 +159,13 @@ string preprocessador(char *argv[]) {
             if(text[i] != ' ' && text[i] != '\t') {
                 creatingToken = true;
                 token += toupper(text[i]);
+                //cout << (char)toupper(text[i]);
             }
             else {
                 if(creatingToken) {
                     newLine += token;
-                    if(text[i-1] != ',') newLine += ' ';
+                    //cout << token << ",";
+                    if(text[i-1] != ',' && text[i-1] != ':') newLine += ' ';
                     creatingToken = false;
                     token = "";
                 }
