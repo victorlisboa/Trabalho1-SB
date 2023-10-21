@@ -98,7 +98,7 @@ void simulador(vector <int> mem, int data){
             }
         }
         
-    }  
+    }
 }
 
 int main(int arg, char *argv[]){
