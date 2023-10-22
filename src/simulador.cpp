@@ -52,7 +52,7 @@ void simulador(vector <int> mem, int data){
             break;
             case 4: acc /= mem[op1];
             break;
-            case 5: pc_skip = mem[op1]; skip = true;
+            case 5: pc_skip = op1; skip = true;
             break;
             case 6: if(acc < 0) {
                 pc_skip = mem[op1];
