@@ -165,7 +165,7 @@ string preprocessador(char *argv[]) {
                 if(creatingToken) {
                     newLine += token;
                     //cout << token << ",";
-                    if(text[i-1] != ',' && text[i-1] != ':') newLine += ' ';
+                    if(text[i-1] != ',') newLine += ' ';
                     creatingToken = false;
                     token = "";
                 }
