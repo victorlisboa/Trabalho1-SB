@@ -36,10 +36,9 @@ string replace_data_section(string file_name) {
 }
 
 string remove_macros(string file_name) {
-    string text, new_file_name, aux = get_file_name(file_name);
-    int path_size = file_name.size()-aux.size();
-    new_file_name = file_name.substr(0, path_size) + "temp_" + aux.substr(0, aux.size()-4) + ".pre";
-
+    string text, new_file_name = get_file_name(file_name);
+    int path_size = file_name.size()-new_file_name.size();
+    new_file_name = file_name.substr(0, path_size) + new_file_name.substr(0, new_file_name.size()-4) + ".pre";
     ifstream file(file_name);
     ofstream newFile(new_file_name);
     
