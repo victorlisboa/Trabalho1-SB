@@ -191,7 +191,7 @@ string preprocessador(char *argv[]) {
     newFile.close();
 
     if(macro) {
-        file_name = remove_macros(argv[1]);
+        file_name = remove_macros(temp);
         remove(temp.c_str());   // apaga temp_file.mcr
     }
     else {

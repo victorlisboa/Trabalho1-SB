@@ -1,0 +1,20 @@
+           ;termina macro 
+;;;;;;;;;; 
+SECAO TEXTo 
+;;;;;;;;;;; 
+LOAD UM             ;carrega primeiro valor em ACC 
+ADD DOIS              ;adiciona o segundo valor 
+STORE RESULTADO     ;guarda o resultado 
+OUTPUT RESULTADO    ;imprime resultado 
+LOAD RESULTADO 
+SUB TRES 
+STORE RESULTADO     ;ja guarda e imprime tudo na macro 
+OUTPUT RESULTADO 
+STOP 
+SECAO DATA 
+;;;;;;;;;; 
+UM: CONST 1 
+DOIS: CONST 2 
+TRES: CONST 3 
+RESULTADO: SPACE 
+;;;;;;;;;;; 
