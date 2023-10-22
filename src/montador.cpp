@@ -209,12 +209,12 @@ int main(int arg, char *argv[]) {
     first_pass(FILE_NAME);
     second_pass(FILE_NAME);
 
-    cout << "Tabela de Simbolos:\nRotulo\t\tEndereco\tLinha\n";
-    for(auto [rotulo, arr] : TS) {
-        if(TS[rotulo][0]) {
-            cout << rotulo << "\t\t" << TS[rotulo][1] << "\t\t" << TS[rotulo][2] << '\n';
-        }
-    }
+    // cout << "Tabela de Simbolos:\nRotulo\t\tEndereco\t\tLinha\n";
+    // for(auto [rotulo, arr] : TS) {
+    //     if(TS[rotulo][0]) {
+    //         cout << rotulo << "\t\t" << TS[rotulo][1] << "\t\t" << TS[rotulo][2] << '\n';
+    //     }
+    // }
 
     return 0;
 }
