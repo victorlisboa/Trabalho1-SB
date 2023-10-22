@@ -133,6 +133,14 @@ string remove_macros(string file_name) {
     return new_file_name;
 }
 
+string remove_spaces(const string &s)
+{
+  int last = s.size() - 1;
+  while (last >= 0 && s[last] == ' ')
+    --last;
+  return s.substr(0, last + 1);
+}
+
 string preprocessador(char *argv[]) {
     
     string file_name = argv[1], text, temp;
@@ -153,6 +161,7 @@ string preprocessador(char *argv[]) {
     bool creatingToken = false;
     while(getline(file, text)) {
         string token = "", newLine = "";
+        text = remove_spaces(text);
         for(auto i=0u; i<text.size(); i++) {
             if(text[i] == ';') {    // ignora comentarios
                 break;
