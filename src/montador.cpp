@@ -19,7 +19,7 @@ void first_pass(string file_name) {
     int contador_pos = 0, contador_linha = 0;
     while(getline(file, text)) {
         contador_linha++;
-        if(text.find("SECAO") != -1) continue;
+        if(text.find("SECAO") != string::npos) continue;
         vector<string> linha = split(text);
         string instrucao = linha[0];                // nao necessariamente vai ser uma instrucao
         if(linha[0][linha[0].size()-1] == ':') {    // tem rotulo na linha
@@ -36,7 +36,7 @@ void first_pass(string file_name) {
             }
         }
         bool achou_instrucao = false;               // procura instrucao na tabela de instrucoes
-        for(int i=0; i<TI.size(); i++) {
+        for(auto i = 0u; i<TI.size(); i++) {
             if(instrucao == TI[i].first) {
                 achou_instrucao = true;
                 contador_pos += TI[i].second;
@@ -90,8 +90,8 @@ void second_pass(string file_name) {
         bool operandos_corretos = true;
         bool rotulo_ausente = false;
         contador_linha++;
-        if(text.find("SECAO") != -1) {
-            if (text.find("SECAO DATA") != -1) {
+        if(text.find("SECAO") != string::npos) {
+            if (text.find("SECAO DATA") != string::npos) {
                 secao = "data";
             }
             continue;
@@ -131,7 +131,7 @@ void second_pass(string file_name) {
             }
             else{
                 bool achou_instrucao = false;
-                for(int i=0; i<TI.size(); i++) {
+                for(auto i = 0u; i<TI.size(); i++) {
                     if(instrucao == TI[i].first) {
                         achou_instrucao = true;
                         string opcode = to_string(i+1);
@@ -145,6 +145,9 @@ void second_pass(string file_name) {
                         }
                         break;
                     }
+                }
+                if(!achou_instrucao) {
+                    cout << "ERRO LEXCIO na linha " << contador_linha << ". Operacao " << instrucao << " invalida." << endl;
                 }
             }
             int op;

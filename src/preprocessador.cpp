@@ -14,10 +14,10 @@ string replace_data_section(string file_name) {
     vector<string> secao_data;
     bool lendo_data_section = false;
     while(getline(file, text)) {
-        if(text.find("SECAO DATA") != -1) {
+        if(text.find("SECAO DATA") != string::npos) {
             lendo_data_section = true;
         }
-        if(text.find("SECAO TEXT") != -1) {
+        if(text.find("SECAO TEXT") != string::npos) {
             lendo_data_section = false;
         }
 
@@ -54,13 +54,12 @@ string remove_macros(string file_name) {
     while(getline(file, text)) {
         vector<string> linha = split(text);  // tokens de cada linha
         bool expandiu = false;
-        for(int i=0; i<linha.size(); i++) {
+        for(auto i = 0u; i<linha.size(); i++) {
             string &token = linha[i];
-            int tokenSize = token.size();
             
             if(lendoMacro) {
                 // troca os simbolos dos argumentos para ficar indexado #1, #2, #...
-                for(int j=0; j<param.size(); j++)
+                for(auto j=0u; j<param.size(); j++)
                     if(token == param[j])
                         token = "#" + to_string(j+1);
                 
@@ -70,7 +69,7 @@ string remove_macros(string file_name) {
                     param.clear();
                 }
 
-                if(i == linha.size()-1 && lendoMacro)
+                if(i == (unsigned) linha.size()-1 && lendoMacro)
                     MDT[macroSendoLida].push_back(linha);
             }
             else {  // nao ta lendo macro
@@ -88,7 +87,7 @@ string remove_macros(string file_name) {
                     if(MNT[token].second > 0) {
                         args = split(linha[i+1], ',');
                     }
-                    for(int j=0; j<MDT[token].size(); j++) {    // percorre linhas do corpo
+                    for(auto j=0u; j<MDT[token].size(); j++) {    // percorre linhas do corpo
                         for(string token2 : MDT[token][j]) {    // percorre  tokens da linha
                             if(token2[0] == '#') {                  // faz o binding
                                 int argIdx = stoi(token2.substr(1));// pega index do arg
@@ -107,7 +106,7 @@ string remove_macros(string file_name) {
         }
 
         bool escreveuLinha = false;
-        for(int i=0; i<linha.size(); i++) {
+        for(auto i=0u; i<linha.size(); i++) {
             if(!expandiu && !lendoMacro && linha[i] != "ENDMACRO") {  // efetivamente passa a linha para o novo arquivo
                 escreveuLinha = true;
                 newFile << linha[i] << ' ';
@@ -151,7 +150,7 @@ string preprocessador(char *argv[]) {
     bool creatingToken = false;
     while(getline(file, text)) {
         string token = "", newLine = "";
-        for(int i=0; i<text.size(); i++) {
+        for(auto i=0u; i<text.size(); i++) {
             if(text[i] == ';') {    // ignora comentarios
                 break;
             }

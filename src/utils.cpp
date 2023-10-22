@@ -5,7 +5,7 @@ vector<string> split(string linha, char sep) {
         Semelhante ao split do Python */
     vector<string> res;
     string token = "";
-    for(int i=0; i<linha.size(); i++) {
+    for(auto i=0u; i<linha.size(); i++) {
         if(linha[i] != sep) {
             token += linha[i];
         }
@@ -22,7 +22,7 @@ string get_file_name(string raw_file_name) {
     string file_name = "";
     vector<string> path = split(raw_file_name, '/');
     string last = path[path.size()-1];
-    for(int i=0; i<last.size(); i++) {
+    for(auto i=0u; i<last.size(); i++) {
         file_name += last[i];
     }
     return file_name;

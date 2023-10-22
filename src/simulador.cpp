@@ -13,7 +13,7 @@ using namespace std;
 int data_section(vector <int> mem){
     int data = mem.size();
     int contador_pos = 0;
-    while (contador_pos < mem.size() && contador_pos < data){
+    while ((unsigned) contador_pos < mem.size() && contador_pos < data){
         int instrucao = mem[contador_pos];
         int tamanho = TI[instrucao - 1].second;
         if (instrucao < 5 || instrucao > 8){
@@ -31,7 +31,7 @@ int data_section(vector <int> mem){
 }
 
 void simulador(vector <int> mem, int data){
-    int contador_pos = 0, contador_linha = 0;
+    int contador_pos = 0;
     bool sair = false;
     int acc = 0;
     int pc_skip;
@@ -41,8 +41,8 @@ void simulador(vector <int> mem, int data){
         bool skip = false;
         int instrucao = mem[contador_pos];
         int op1, op2;
-        if(contador_pos + 1 < mem.size()) op1 = mem[contador_pos+1];
-        if(contador_pos + 2 < mem.size()) op2 = mem[contador_pos+2];
+        if(contador_pos + 1u < mem.size()) op1 = mem[contador_pos+1];
+        if(contador_pos + 2u < mem.size()) op2 = mem[contador_pos+2];
         switch(instrucao){
             case 1: acc += mem[op1];
             break;
