@@ -100,7 +100,7 @@ void first_pass(string file_name) {
 int getOp(string expression){
     vector<string> values = split(expression,'+');
     int op = 0;
-    if (TS.find(values[0]) != TS.end()){
+    if (TS[values[0]][0]) {    // verifica se foi definido na tabela de simbolos
         op += TS[values[0]][1];
         if(values.size() > 1) op += stoi(values[1]);
     }
