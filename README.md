@@ -2,6 +2,8 @@
 
 O trabalho consiste em implementar em C/C++ um método de tradução de uma linguagem de montagem simples para uma representação de código objeto. O tradutor a ser implementado será um Assembler da linguagem hipotética vista em sala de aula.
 
+Fizemos o montador de duas passagens com preprocessamento. Os arquivos-fonte estão no diretório `src`.
+
 ## Alunos
 
 - Luís Henrique Araújo Martins - 221002058
@@ -9,7 +11,7 @@ O trabalho consiste em implementar em C/C++ um método de tradução de uma ling
 
 ## SO utilizado
 
-Testado em Linux e Windows
+Testado em Linux e Windows.
 
 ## Como compilar
 
