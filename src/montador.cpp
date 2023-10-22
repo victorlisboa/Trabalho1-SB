@@ -12,8 +12,14 @@ using namespace std;
 
 map<string, array<int, 3>> TS;          // tabela de simbolos <simbolo, <definido, endereco, linha>>
 
+bool ERRO = false;
+
 bool is_alpha(char c) {
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+
+bool is_num(char c) {
+    return c >= '0' && c <= '9';
 }
 
 void first_pass(string file_name) {
@@ -29,11 +35,28 @@ void first_pass(string file_name) {
         if(linha[0][linha[0].size()-1] == ':') {    // tem rotulo na linha
             instrucao = linha[1];
             string rotulo = linha[0].substr(0, linha[0].size()-1);
+            
+            // verificacao de rotulo invalido
+            bool rotulo_invalido = false;
             if(rotulo[0] != '_' && !is_alpha(rotulo[0])) {
+                rotulo_invalido = true;
+            }
+            else {
+                for(char c : rotulo) {
+                    if(!(c == '_' || is_alpha(c) || is_num(c))) {
+                        rotulo_invalido = true;
+                        break;
+                    }
+                }
+            }
+            if(rotulo_invalido) {
+                ERRO = true;
                 cout << "ERRO LEXICO na linha " << contador_linha << ": rotulo " <<
                 rotulo << " invalido.\n";
             }
+
             if(TS[rotulo][0]) {                     // rotulo ja foi definido
+                ERRO = true;
                 cout << "ERRO SEMANTICO na linha " << contador_linha << ": rotulo " <<
                 rotulo << " previamente definido na linha " << TS[rotulo][2] << ".\n";
             }
@@ -68,6 +91,7 @@ void first_pass(string file_name) {
             }
         }
         if(!achou_instrucao && !achou_diretiva) {
+            ERRO = true;
             cout << "ERRO LEXICO na linha " << contador_linha << ": expressao " <<
             instrucao << " nao reconhecida.\n";
         }
@@ -89,8 +113,6 @@ int getOp(string expression){
 void second_pass(string file_name) {
     ifstream file(file_name);
     string text, raw_name = get_file_name(file_name), path = file_name.substr(0, file_name.size()-raw_name.size());
-    // size_t last_index = file_name.find_last_of(".");
-    // string raw_name = file_name.substr(0, last_index);
     ofstream newFile(path + raw_name.substr(10,raw_name.size()-14) + ".obj");
     string secao = "text";
 
@@ -195,9 +217,11 @@ void second_pass(string file_name) {
             }
         }
         if(rotulo_ausente){
+            ERRO = true;
             cout << "Erro semantico na linha " << contador_linha << ". Rotulo nao definido." << endl;
         }
         if(!operandos_corretos){
+            ERRO = true;
             cout << "Erro sintatico na linha " << contador_linha << ". Quantidade de operandos invalida. " << endl; 
         }
     }
@@ -216,12 +240,7 @@ int main(int arg, char *argv[]) {
     first_pass(FILE_NAME);
     second_pass(FILE_NAME);
 
-    // cout << "Tabela de Simbolos:\nRotulo\t\tEndereco\t\tLinha\n";
-    // for(auto [rotulo, arr] : TS) {
-    //     if(TS[rotulo][0]) {
-    //         cout << rotulo << "\t\t" << TS[rotulo][1] << "\t\t" << TS[rotulo][2] << '\n';
-    //     }
-    // }
+    if(!ERRO) cout << "Os arquivos de pre-processamento e objeto foram criados com sucesso!\n";
 
     return 0;
 }
