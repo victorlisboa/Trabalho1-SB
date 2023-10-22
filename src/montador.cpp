@@ -130,10 +130,8 @@ void second_pass(string file_name) {
                 }
             }
             else{
-                bool achou_instrucao = false;
                 for(auto i = 0u; i<TI.size(); i++) {
                     if(instrucao == TI[i].first) {
-                        achou_instrucao = true;
                         string opcode = to_string(i+1);
                         contador_pos += TI[i].second;
                         newFile << opcode << " ";
@@ -145,9 +143,6 @@ void second_pass(string file_name) {
                         }
                         break;
                     }
-                }
-                if(!achou_instrucao) {
-                    cout << "ERRO LEXCIO na linha " << contador_linha << ". Operacao " << instrucao << " invalida." << endl;
                 }
             }
             int op;
