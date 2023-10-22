@@ -12,6 +12,10 @@ using namespace std;
 
 map<string, array<int, 3>> TS;          // tabela de simbolos <simbolo, <definido, endereco, linha>>
 
+bool is_alpha(char c) {
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+
 void first_pass(string file_name) {
     ifstream file(file_name);
     string text;
@@ -25,6 +29,10 @@ void first_pass(string file_name) {
         if(linha[0][linha[0].size()-1] == ':') {    // tem rotulo na linha
             instrucao = linha[1];
             string rotulo = linha[0].substr(0, linha[0].size()-1);
+            if(rotulo[0] != '_' && !is_alpha(rotulo[0])) {
+                cout << "ERRO LEXICO na linha " << contador_linha << ": rotulo " <<
+                rotulo << " invalido.\n";
+            }
             if(TS[rotulo][0]) {                     // rotulo ja foi definido
                 cout << "ERRO SEMANTICO na linha " << contador_linha << ": rotulo " <<
                 rotulo << " previamente definido na linha " << TS[rotulo][2] << ".\n";
