@@ -142,6 +142,10 @@ string preprocessador(char *argv[]) {
     
     // abre arquivos
     ifstream file(argv[1]); // abre o arquivo .asm ou .mcr
+    if(!file.is_open()) {
+        cout << "Arquivo inexistente! Verifique o caminho e tente novamente.";
+        exit(1);
+    }
     ofstream newFile(temp); // cria novo arquivo .asm ou .mcr
     
     /* Remove espacos, tabulacoes, linhas desnecessarias,
