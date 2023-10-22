@@ -93,7 +93,7 @@ void simulador(vector <int> mem, int data){
 
         if(instrucao >= 5 && instrucao <= 8){
             if(op1 >= data){
-                cout << "Segmentation2 fault (core dumped)" << endl;
+                cout << "Segmentation fault (core dumped)" << endl;
                 break;
             }
         }
