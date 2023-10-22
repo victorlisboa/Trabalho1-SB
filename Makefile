@@ -22,7 +22,7 @@ simulador: $(OBJ_DIR)/simulador.o $(OBJ_DIR)/utils.o
 	$(CXX) $(CFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS) $(PROGRAMS)
